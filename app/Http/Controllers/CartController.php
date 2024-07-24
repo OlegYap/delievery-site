@@ -38,6 +38,7 @@ class CartController extends Controller
         if (!$cart) {
             $cart = new Cart(['user_id' => $cart]);
             $cart->save();
+            return view('cart');
         }
         $cartProducts = CartProduct::where('cart_id', $cart->id)->with('product')->get();
 
@@ -47,6 +48,23 @@ class CartController extends Controller
         }
 
         return view('cart', compact('cartProducts', 'totalPrice'));
+    }
+
+    public function editQuantity(Request $request)
+    {
+        $user = auth()->id();
+        $cart = Cart::where('user_id', $user)->first();
+        if (!$cart) {
+            return redirect('/main');
+        }
+        $productId = $request->input('product_id');
+        $quantity = $request->input('quantity');
+        $cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $productId)->first();
+        if ($cartProduct) {
+            $cartProduct->quantity = $quantity;
+            $cartProduct->save();
+        }
+        return redirect()->back();
     }
 
     public function removeCartProduct(Request $request)

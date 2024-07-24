@@ -11,7 +11,7 @@ class MainController extends Controller
     public function getMainPage()
     {
         if (!Auth::id()) {
-            return view('login');
+            return view('register');
         }
         $products = Product::all();
         return view('main', ['products' => $products]);

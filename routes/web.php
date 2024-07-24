@@ -23,10 +23,11 @@ Route::get('/', function () {
 });
 
 Route::get('/register', [UserController::class, 'getRegistration'])->name('register');
-Route::post('/register',[UserController::class,'postRegistration'])->name('register');
+Route::post('/register', [UserController::class, 'postRegistration'])->name('register');
 
-Route::get('/login',[UserController::class, 'getLogin'])->name('login');
-Route::post('/login',[UserController::class,'postLogin'])->name('login');
+Route::get('/login', [UserController::class, 'getLogin'])->name('login');
+Route::post('/login', [UserController::class, 'postLogin'])->name('login');
+
 
 Route::get('/signout', [UserController::class, 'signOut'])->name('signout');
 
@@ -35,7 +36,11 @@ Route::post('/addProduct', [ProductController::class, 'addProduct'])->name('addP
 
 Route::post('/addCart', [CartController::class, 'addCart'])->name('addCart');
 Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.show');
+Route::post('/cart/editQuantity', [CartController::class, 'editQuantity'])->name('editQuantity');
 Route::delete('/cart/remove', [CartController::class, 'removeCartProduct'])->name('cartRemove');
 
 Route::get('/order', [OrderController::class, 'viewOrderForm'])->name('orderView');
 Route::post('/order', [OrderController::class, 'createOrder'])->name('orderCreate');
+Route::get('/order/{id}', [OrderController::class, 'viewOrder'])->name('viewOrderProduct');
+
+

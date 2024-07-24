@@ -43,18 +43,20 @@
                     </a>
                 </td>
                 <td class="cart-product-row cart-qnt">
-                    <span>{{ $cartProduct->quantity }}</span>
-                    <form action="{{ route('cartRemove') }}" method="POST">
+                    <form action="{{ route('editQuantity') }}" method="POST" class="quantity-form">
                         @csrf
-                        @method('DELETE')
                         <input type="hidden" name="product_id" value="{{ $cartProduct->product_id }}">
+                        <div class="quantity-input">
+                            <button type="button" class="quantity-btn minus" onclick="decrementQuantity(this)">-</button>
+                            <input type="number" name="quantity" value="{{ $cartProduct->quantity }}" min="1" class="quantity">
+                            <button type="button" class="quantity-btn plus" onclick="incrementQuantity(this)">+</button>
+                        </div>
                         <button type="submit" class="cart-product-button button">
-                                <span class="btn">
-                                    Удалить
-                                </span>
+                            <span class="btn">
+                                Обновить
+                            </span>
                         </button>
                     </form>
-                </td>
                 <td class="cart-product-subtotal has-text-right nowrap">
                     <div class="is-relative"><span>{{ $cartProduct->product->price * $cartProduct->quantity }} руб.</span></div>
                 </td>
@@ -78,6 +80,23 @@
 </main>
 </body>
 </html>
+
+<script>
+    function incrementQuantity(button) {
+        var form = button.closest('form');
+        var quantityInput = form.querySelector('input[name="quantity"]');
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+    }
+
+    function decrementQuantity(button) {
+        var form = button.closest('form');
+        var quantityInput = form.querySelector('input[name="quantity"]');
+        var currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+        }
+    }
+</script>
 
 <style>
     .table.cart {
