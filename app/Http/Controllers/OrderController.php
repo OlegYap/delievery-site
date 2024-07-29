@@ -31,4 +31,9 @@ class OrderController extends Controller
 
         return view('viewOrderProduct', compact('order', 'totalPrice'));
     }
+
+    public function test()
+    {
+        return view('test');
+    }
 }

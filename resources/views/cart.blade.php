@@ -72,7 +72,7 @@
     </table>
     <div>
         <p>
-            <span class="btn btn-secondary">Очистить</span>
+            <span class="btn btn-secondary">Очистить корзину</span>
             <a href="{{ route('orderView') }}" class="btn btn-primary">Оформить заказ</a>
         </p>
     </div>

@@ -43,4 +43,5 @@ Route::get('/order', [OrderController::class, 'viewOrderForm'])->name('orderView
 Route::post('/order', [OrderController::class, 'createOrder'])->name('orderCreate');
 Route::get('/order/{id}', [OrderController::class, 'viewOrder'])->name('viewOrderProduct');
 
+Route::get('/test', [OrderController::class, 'test'])->name('test');
 

@@ -34,12 +34,13 @@ class CartController extends Controller
     public function viewCart(Request $request)
     {
         $user = auth()->id();
+
         $cart = Cart::where('user_id', $user)->first();
         if (!$cart) {
-            $cart = new Cart(['user_id' => $cart]);
+            $cart = new Cart(['user_id' => $user]);
             $cart->save();
-            return view('cart');
         }
+
         $cartProducts = CartProduct::where('cart_id', $cart->id)->with('product')->get();
 
         $totalPrice = 0;
