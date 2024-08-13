@@ -13,7 +13,18 @@ class Order extends Model
         'surname',
         'phone',
         'address',
+        'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(OrderProduct::class);
+    }
 
     public $timestamps = false; // Решает проблему со столбцами updated_at, created_at. Команда отключает автоматическое вставление данных в столбцы.
 

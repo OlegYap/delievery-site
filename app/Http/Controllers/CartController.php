@@ -51,6 +51,46 @@ class CartController extends Controller
         return view('cart', compact('cartProducts', 'totalPrice'));
     }
 
+    public function updateCart(Request $request)
+    {
+        $user = auth()->id();
+        $cart = Cart::where('user_id', $user)->first();
+
+        if (!$cart) {
+            return response()->json(['error' => 'Cart not found'], 404);
+        }
+
+        $productId = $request->input('product_id');
+        $quantity = (int) $request->input('quantity');
+
+        if ($quantity < 1) {
+            return response()->json(['error' => 'Invalid quantity'], 400);
+        }
+
+        $cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $productId)->first();
+
+        if ($cartProduct) {
+            if ($quantity == 0) {
+                $cartProduct->delete();
+            } else {
+                $cartProduct->quantity = $quantity;
+                $cartProduct->save();
+            }
+        } else {
+            if ($quantity > 0) {
+                CartProduct::create([
+                    'cart_id' => $cart->id,
+                    'product_id' => $productId,
+                    'quantity' => $quantity,
+                ]);
+            }
+        }
+
+        $cartCount = CartProduct::where('cart_id', $cart->id)->sum('quantity');
+
+        return response()->json(['success' => 'Cart updated successfully', 'cartCount' => $cartCount]);
+    }
+
     public function editQuantity(Request $request)
     {
         $user = auth()->id();
@@ -68,20 +108,17 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    public function removeCartProduct(Request $request)
+    public function clearCart(Request $request)
     {
         $user = auth()->id();
         $cart = Cart::where('user_id', $user)->first();
+
         if (!$cart) {
             return redirect()->back()->withErrors(['error' => 'Cart not found']);
         }
 
-        $productId = $request->input('product_id');
-        $cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $productId)->first();
-        if ($cartProduct) {
-            $cartProduct->delete();
-        }
+        CartProduct::where('cart_id', $cart->id)->delete();
 
-        return redirect()->back();
+        return redirect()->route('cartView');
     }
 }

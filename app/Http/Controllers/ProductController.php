@@ -11,10 +11,10 @@ class ProductController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric',
             'category' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'description' => 'required|string|max:65535',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
         if ($request->hasFile('image')) {

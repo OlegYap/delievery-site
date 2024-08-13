@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cart</title>
 </head>
@@ -57,6 +56,7 @@
                             </span>
                         </button>
                     </form>
+                </td>
                 <td class="cart-product-subtotal has-text-right nowrap">
                     <div class="is-relative"><span>{{ $cartProduct->product->price * $cartProduct->quantity }} руб.</span></div>
                 </td>
@@ -71,10 +71,11 @@
         </tfoot>
     </table>
     <div>
-        <p>
-            <span class="btn btn-secondary">Очистить корзину</span>
-            <a href="{{ route('orderView') }}" class="btn btn-primary">Оформить заказ</a>
-        </p>
+        <form action="{{ route('clearCart') }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit" class="btn btn-secondary">Очистить корзину</button>
+        </form>
+        <a href="{{ route('viewOrderForm') }}" class="btn btn-primary">Оформить заказ</a>
     </div>
     <a href="/main">Продолжить покупки</a>
 </main>

@@ -17,6 +17,11 @@ class Product extends Model
     ];
 
 
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_product')
+            ->withPivot('quantity', 'price');
+    }
 
     public $timestamps = false; // Решает проблему со столбцами updated_at, created_at. Команда отключает автоматическое вставление данных в столбцы.
 
