@@ -12,10 +12,14 @@ class Cart extends Model
         'user_id'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function cartProducts()
     {
         return $this->hasMany(CartProduct::class);
     }
-
     public $timestamps = false; // Решает проблему со столбцами updated_at, created_at. Команда отключает автоматическое вставление данных в столбцы.
 }

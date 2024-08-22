@@ -4,120 +4,79 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartProduct;
+use App\Services\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    protected $cartService;
+
+    public function __construct(CartService $cartService) {
+        $this->cartService = $cartService;
+    }
+
+
     public function addCart(Request $request)
     {
-        $user = auth()->id();
-        $cart = Cart::where('user_id', $user)->first();
-        if (!$cart) {
-            $cart = new Cart(['user_id' => $user]);
-            $cart->save();
-        }
+        $user = Auth::id();
+        $cart = $this->cartService->getOrCreateCart($user);
 
         $productId = $request->input('product_id');
         $quantity = $request->input('quantity');
 
-        $cartProduct = new CartProduct([
-            'cart_id' => $cart->id,
-            'product_id' => $productId,
-            'quantity' => $quantity
-        ]);
-        $cartProduct->save();
+        $this->cartService->addProductToCart($cart->id, $productId, $quantity);
 
         return redirect()->back();
     }
 
     public function viewCart(Request $request)
     {
-        $user = auth()->id();
+        $user = Auth::id();
+        $cart = $this->cartService->getOrCreateCart($user);
 
-        $cart = Cart::where('user_id', $user)->first();
-        if (!$cart) {
-            $cart = new Cart(['user_id' => $user]);
-            $cart->save();
-        }
-
-        $cartProducts = CartProduct::where('cart_id', $cart->id)->with('product')->get();
-
-        $totalPrice = 0;
-        foreach ($cartProducts as $cartProduct) {
-            $totalPrice += $cartProduct->product->price * $cartProduct->quantity;
-        }
+        $cartProducts = $this->cartService->getCartProducts($cart->id);
+        $totalPrice = $this->cartService->calculateTotalPrice($cartProducts);
 
         return view('cart', compact('cartProducts', 'totalPrice'));
     }
 
     public function updateCart(Request $request)
     {
-        $user = auth()->id();
-        $cart = Cart::where('user_id', $user)->first();
-
-        if (!$cart) {
-            return response()->json(['error' => 'Cart not found'], 404);
-        }
+        $user = Auth::id();
+        $cart = $this->cartService->getOrCreateCart($user);
 
         $productId = $request->input('product_id');
         $quantity = (int) $request->input('quantity');
 
-        if ($quantity < 1) {
-            return response()->json(['error' => 'Invalid quantity'], 400);
+        $result = $this->cartService->updateCartProduct($cart->id, $productId, $quantity);
+
+        if (isset($result['error'])) {
+            return response()->json(['error' => $result['error']], 400);
         }
 
-        $cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $productId)->first();
-
-        if ($cartProduct) {
-            if ($quantity == 0) {
-                $cartProduct->delete();
-            } else {
-                $cartProduct->quantity = $quantity;
-                $cartProduct->save();
-            }
-        } else {
-            if ($quantity > 0) {
-                CartProduct::create([
-                    'cart_id' => $cart->id,
-                    'product_id' => $productId,
-                    'quantity' => $quantity,
-                ]);
-            }
-        }
-
-        $cartCount = CartProduct::where('cart_id', $cart->id)->sum('quantity');
-
-        return response()->json(['success' => 'Cart updated successfully', 'cartCount' => $cartCount]);
+        return response()->json($result);
     }
 
     public function editQuantity(Request $request)
     {
-        $user = auth()->id();
-        $cart = Cart::where('user_id', $user)->first();
-        if (!$cart) {
-            return redirect('/main');
-        }
+        $user = Auth::id();
+        $cart = $this->cartService->getOrCreateCart($user);
+
         $productId = $request->input('product_id');
         $quantity = $request->input('quantity');
-        $cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $productId)->first();
-        if ($cartProduct) {
-            $cartProduct->quantity = $quantity;
-            $cartProduct->save();
-        }
+
+        $this->cartService->editCartProductQuantity($cart->id, $productId, $quantity);
+
         return redirect()->back();
     }
 
-    public function clearCart(Request $request)
+    public function clearCart()
     {
-        $user = auth()->id();
-        $cart = Cart::where('user_id', $user)->first();
+        $user = Auth::id();
+        $cart = $this->cartService->getOrCreateCart($user);
 
-        if (!$cart) {
-            return redirect()->back()->withErrors(['error' => 'Cart not found']);
-        }
-
-        CartProduct::where('cart_id', $cart->id)->delete();
+        $this->cartService->clearCart($cart->id);
 
         return redirect()->route('cartView');
     }

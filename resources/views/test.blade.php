@@ -1,4 +1,4 @@
-<body>
+{{--<body>
 <div class="cart-container">
     <button id="cart-button" class="cart-button">
         <img src="data:image/svg+xml;charset=utf-8,%3Csvg width='44' height='24' fill='%23c9c9c9' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='5' y='7' width='2' height='10' rx='1'/%3E%3Crect x='-6' y='8' width='2' height='10' rx='1' transform='rotate(-90 0 7)'/%3E%3Cg transform='translate(18)' clip-path='url(%23a)'%3E%3Cpath d='M14.32 6H20a2 2 0 0 1 2 2v2a2 2 0 0 1-1.165 1.818l-.67 7.363A2 2 0 0 1 18.174 21H5.826a2 2 0 0 1-1.991-1.819l-.67-7.363A2 2 0 0 1 2 10V8a2 2 0 0 1 2-2h4.002c.683 0 1.02.557 1.02 1.003A.996.996 0 0 1 8.002 8H4v2h16V8h-6c-.235.005-.47-.07-.663-.23L8.398 3.691a.909.909 0 0 1-.064-1.344l.064-.064a1 1 0 0 1 1.344-.064L14.32 6Zm4.49 6H5.19l.636 7h12.348l.636-7ZM8 14a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1Zm4 0a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1Zm4 0a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1Z'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Cpath transform='translate(2 2)' d='M0 0h20v19H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E" alt="Cart Icon">
@@ -153,4 +153,45 @@
             transform: scale(1.1);
         }
     }
-</style>
+</style>--}}
+
+
+    <!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+    let num = 100
+    let string = 'string'
+    let nan = NaN
+    let bool = true
+/*
+    let undefined = undefined
+*/
+    let arr = ['sting',100,false]
+    let obj = {
+        somekey: 100,
+        somekey2: 200,
+        somekey3: 300,
+    }
+
+    function someFunc() {
+        return 'Hello World';
+    }
+
+    let func = function () {
+        return 'World Hello';
+    }
+
+    console.log(func);
+</script>

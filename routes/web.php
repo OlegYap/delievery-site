@@ -36,7 +36,6 @@ Route::post('/addProduct', [ProductController::class, 'addProduct'])->name('addP
 
 Route::post('/addCart', [CartController::class, 'addCart'])->name('addCart');
 Route::get('/cart', [CartController::class, 'viewCart'])->name('cartView');
-
 Route::post('/cart/editQuantity', [CartController::class, 'editQuantity'])->name('editQuantity');
 Route::post('/cart/clear', [CartController::class, 'clearCart'])->name('clearCart');
 Route::post('/update-cart', [CartController::class, 'updateCart'])->name('updateCart');
@@ -44,6 +43,11 @@ Route::post('/update-cart', [CartController::class, 'updateCart'])->name('update
 Route::get('/order', [OrderController::class, 'viewOrderForm'])->name('viewOrderForm');
 Route::post('/order', [OrderController::class, 'createOrder'])->name('orderCreate');
 Route::get('/order/{id}', [OrderController::class, 'viewOrder'])->name('viewOrderProduct');
+Route::get('/orders', [OrderController::class, 'viewOrders'])->name('orders');
 
 Route::get('/test', [OrderController::class, 'test'])->name('test');
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
